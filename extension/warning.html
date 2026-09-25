@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PhishingGuard - Security Warning</title>
+    <link rel="stylesheet" href="warning.css">
+</head>
+<body>
+    <div class="warning-container">
+        <div class="warning-icon">🚨</div>
+        <h1>Security Warning</h1>
+        <p class="warning-subtitle">PhishingGuard blocked navigation to a potentially dangerous website.</p>
+        
+        <div class="url-box">
+            <span id="target-url">Loading URL...</span>
+        </div>
+        
+        <div class="reasons-box" id="reasons-box">
+            <strong>Detection Reasons:</strong>
+            <ul id="reasons-list">
+                <!-- Reasons will be injected here -->
+            </ul>
+        </div>
+        
+        <p class="recommendation">We strongly recommend you close this page and return to your email.</p>
+        
+        <div class="actions">
+            <button id="btn-return" class="btn btn-safe">Go Back to Safety</button>
+            <button id="btn-proceed" class="btn btn-danger">Proceed Anyway (Unsafe)</button>
+        </div>
+    </div>
+    <script src="warning.js"></script>
+</body>
+</html>

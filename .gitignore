@@ -1,0 +1,44 @@
+# Python environments & cache
+venv/
+*/venv/
+env/
+*/env/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Sensitive environment configs
+.env
+*.env
+backend/.env
+backend/*.env
+!.env.example
+!backend/.env.example
+
+# Databases & local storage
+*.db
+*.sqlite
+*.sqlite3
+phishingguard.db
+backend/app/phishingguard.db
+
+# Machine Learning artifacts
+*.joblib
+*.pkl
+*.model
+!backend/app/ml/*.joblib
+!app/ml/*.joblib
+
+# OS & IDE metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Distribution & temporary files
+dist/
+build/
+*.egg-info/
+scratch/

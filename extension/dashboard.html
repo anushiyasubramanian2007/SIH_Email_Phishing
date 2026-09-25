@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PhishingGuard Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>🛡️ PhishingGuard</h2>
+            <span class="sub-badge">Cybersecurity Engine</span>
+        </div>
+        <ul class="nav">
+            <li class="active" id="nav-dashboard">📊 Dashboard</li>
+            <li id="nav-scanner">🔍 Email & Attachment Scanner</li>
+            <li id="nav-forensics">🔬 Forensic Lab & Graph</li>
+            <li id="nav-cases">📁 Cases & Campaigns</li>
+            <li id="nav-threat-intel">🌐 Threat Intel</li>
+            <li id="nav-settings">⚙️ Settings</li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="section-dashboard" class="content-section active-section">
+            <header>
+                <h1>Security Dashboard</h1>
+                <p>Live analysis and detection history</p>
+            </header>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Analyzed</h3>
+                    <div class="value" id="stat-total">-</div>
+                </div>
+                <div class="stat-card alert-phishing">
+                    <h3>Phishing Blocked</h3>
+                    <div class="value" id="stat-phishing">-</div>
+                </div>
+                <div class="stat-card alert-suspicious">
+                    <h3>Suspicious Flagged</h3>
+                    <div class="value" id="stat-suspicious">-</div>
+                </div>
+                <div class="stat-card alert-safe">
+                    <h3>Legitimate / Safe</h3>
+                    <div class="value" id="stat-safe">-</div>
+                </div>
+            </div>
+            
+            <div class="history-section">
+                <div class="history-header">
+                    <h2>Recent Security Events</h2>
+                    <button id="btn-refresh-stats" class="small-btn">🔄 Refresh Data</button>
+                </div>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Type</th>
+                            <th>Target</th>
+                            <th>Verdict</th>
+                            <th>Action Taken</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <tr><td colspan="5">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Email & Attachment Scanner Section -->
+        <div id="section-scanner" class="content-section" style="display: none;">
+            <header>
+                <h1>Email & Attachment Scanner</h1>
+                <p>Analyze suspicious text, sender reputation, links, and dangerous attachments with the Hybrid AI Engine</p>
+            </header>
+
+            <!-- Quick Presets -->
+            <div class="presets-container">
+                <span class="presets-label">⚡ Quick Test Presets:</span>
+                <button class="preset-btn btn-preset-legit" id="btn-preset-legit">🏢 Legitimate Email</button>
+                <button class="preset-btn btn-preset-phish" id="btn-preset-phish">🚨 Phishing Urgent Text</button>
+                <button class="preset-btn btn-preset-att" id="btn-preset-att">📎 Malicious Attachment (.exe)</button>
+                <button class="preset-btn btn-preset-macro" id="btn-preset-macro">⚠️ Macro Document (.xlsm)</button>
+            </div>
+
+            <div class="scanner-layout">
+                <!-- Scanner Form -->
+                <div class="scanner-form-card">
+                    <h3>✉️ Email Parameters</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="scan-sender-name">Sender Display Name</label>
+                            <input type="text" id="scan-sender-name" placeholder="e.g. PayPal Support or Dr. Smith" />
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="scan-sender-email">Sender Email Address</label>
+                            <input type="text" id="scan-sender-email" placeholder="e.g. alert@paypal-secure-notice.com" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scan-subject">Subject Line</label>
+                        <input type="text" id="scan-subject" placeholder="e.g. Urgent: Account Verification Required" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scan-body">Email Body (Text Content)</label>
+                        <textarea id="scan-body" rows="6" placeholder="Paste the email content to analyze for phishing language, urgency, and threats..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scan-links">Embedded Links / URLs (one per line or comma-separated)</label>
+                        <input type="text" id="scan-links" placeholder="e.g. http://192.168.1.1/login, https://test-phish.com" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scan-attachments">
+                            📎 Attachment Filenames to Inspect
+                            <span class="label-hint">(e.g. invoice.pdf.exe, schedule.pdf, statement.docm)</span>
+                        </label>
+                        <input type="text" id="scan-attachments" placeholder="invoice.pdf, receipt.pdf.exe, wire_transfer.xlsm" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            📂 Or Upload Real Attachment File(s)
+                            <span class="label-hint">(Analyzes magic bytes, PE binary headers, and hashes)</span>
+                        </label>
+                        <input type="file" id="scan-file-upload" class="file-input" />
+                        <div id="file-upload-info" class="file-upload-info"></div>
+                    </div>
+
+                    <div class="scanner-btn-row">
+                        <button id="btn-run-scan" class="primary-btn btn-large">🚀 Scan Email & Attachments</button>
+                        <button id="btn-clear-scan" class="secondary-btn">Clear Form</button>
+                    </div>
+                </div>
+
+                <!-- Scanner Result Panel -->
+                <div class="scanner-result-card" id="scanner-result-container">
+                    <div class="result-placeholder" id="result-placeholder">
+                        <div class="placeholder-icon">🛡️</div>
+                        <h3>Ready to Scan</h3>
+                        <p>Fill in email details or choose a Quick Test Preset above, then click <strong>"Scan Email & Attachments"</strong> to see the real-time verdict.</p>
+                    </div>
+
+                    <div id="result-details" style="display: none;">
+                        <!-- Top Verdict Header -->
+                        <div class="verdict-banner" id="res-verdict-banner">
+                            <div class="verdict-main">
+                                <span class="verdict-icon" id="res-verdict-icon">🛡️</span>
+                                <div>
+                                    <div class="verdict-title-row">
+                                        <span class="verdict-status" id="res-verdict-text">LEGITIMATE</span>
+                                        <span class="verdict-risk-badge" id="res-risk-badge">LOW RISK</span>
+                                    </div>
+                                    <p class="verdict-explanation" id="res-explanation"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Grid Cards -->
+                        <div class="res-grid">
+                            <!-- Text Analysis Card -->
+                            <div class="res-subcard">
+                                <h4>📝 Text & AI NLP Analysis</h4>
+                                <div id="res-text-content" class="res-subcard-body"></div>
+                            </div>
+
+                            <!-- Attachment Analysis Card -->
+                            <div class="res-subcard">
+                                <h4>📎 Attachment Security Inspection</h4>
+                                <div id="res-attachment-content" class="res-subcard-body"></div>
+                            </div>
+                        </div>
+
+                        <!-- Indicators Breakdown -->
+                        <div class="res-indicators-card">
+                            <h4>🔍 Triggered Threat & Security Indicators</h4>
+                            <ul id="res-indicators-list" class="res-indicators-list"></ul>
+                        </div>
+
+                        <!-- Action Recommendation -->
+                        <div class="res-action-card">
+                            <div class="action-icon">💡</div>
+                            <div>
+                                <strong>Recommended Action:</strong>
+                                <span id="res-action-text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forensic Lab & Threat Graph Section -->
+        <div id="section-forensics" class="content-section" style="display: none;">
+            <header>
+                <h1>Forensic Intelligence Lab & Origin Graph</h1>
+                <p>RFC 5322 Ingestion, Hop-by-Hop Provenance, Multi-Factor Fraud Fusion, and Dynamic Threat Graphs</p>
+            </header>
+
+            <!-- Quick EML Presets -->
+            <div class="presets-container">
+                <span class="presets-label">🧪 Load Sample Fixtures:</span>
+                <button class="preset-btn btn-preset-legit" id="btn-forensic-preset-legit">🏢 Legitimate</button>
+                <button class="preset-btn btn-preset-phish" id="btn-forensic-preset-bec">🚨 BEC Invoice Fraud</button>
+                <button class="preset-btn btn-preset-att" id="btn-forensic-preset-tor">🧅 Tor Exit Node</button>
+                <button class="preset-btn btn-preset-macro" id="btn-forensic-preset-lookalike">🔤 Homoglyph Domain</button>
+                <button class="preset-btn btn-preset-phish" id="btn-forensic-preset-phish">🎣 Credential Harvesting</button>
+            </div>
+
+            <div class="scanner-layout">
+                <!-- Ingestion Card -->
+                <div class="scanner-form-card">
+                    <h3>📥 Raw Email Ingestion (.EML or Headers)</h3>
+                    <div class="form-group">
+                        <label for="forensic-file-input">Upload .EML / Email File</label>
+                        <input type="file" id="forensic-file-input" accept=".eml,.txt,.msg" />
+                    </div>
+                    <div class="form-group">
+                        <label for="forensic-raw-text">Or Paste RFC 5322 Email Source / Headers</label>
+                        <textarea id="forensic-raw-text" rows="8" placeholder="Received: from mail.example.com ...&#10;From: sender@example.com&#10;Subject: ..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button id="btn-run-forensics" class="primary-btn" style="flex: 2;">⚡ Run Deep Forensic Analysis</button>
+                        <button id="btn-clear-forensics" class="small-btn" style="flex: 1;">Clear</button>
+                    </div>
+                    <div id="forensic-loading" style="display: none; margin-top: 10px; color: var(--primary); font-size: 13px;">
+                        Analyzing RFC headers, hop path, DNS/WHOIS, and computing fused fraud score...
+                    </div>
+                </div>
+
+                <!-- Forensic Results Panel -->
+                <div class="scanner-results-card" id="forensic-results-container" style="display: none;">
+                    <div id="forensic-verdict-banner" class="verdict-banner">
+                        <div class="verdict-icon" id="forensic-verdict-icon">🛡️</div>
+                        <div class="verdict-text">
+                            <h2 id="forensic-verdict-title">ANALYSIS COMPLETE</h2>
+                            <p id="forensic-verdict-desc">Risk Tier: -</p>
+                        </div>
+                        <div class="verdict-score-box">
+                            <span class="score-num" id="forensic-score-num">0</span>
+                            <span class="score-label">Fraud Score</span>
+                        </div>
+                    </div>
+
+                    <!-- Probable Origin Infrastructure Status Banner -->
+                    <div class="origin-status-card" id="forensic-origin-status-card" style="margin-bottom: 12px; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg, #ffffff);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span class="status-badge" id="origin-status-badge" style="font-weight: 700; padding: 3px 10px; border-radius: 4px; font-size: 12px;">PROVIDER_RELAY</span>
+                            <span id="origin-confidence-pill" style="font-size: 11px; font-weight: 600; color: var(--text-muted);">Confidence: Low</span>
+                        </div>
+                        <div id="origin-status-msg" style="font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"></div>
+                        <div id="origin-geo-details" style="font-size: 12px; color: var(--text-muted);"></div>
+                    </div>
+
+                    <!-- Origin Attribution Archetype Card -->
+                    <div class="attribution-card" id="forensic-attribution-card">
+                        <div class="attribution-header">
+                            <span class="attribution-badge" id="forensic-attr-archetype">ORIGIN ATTRIBUTION</span>
+                            <span class="attribution-confidence" id="forensic-attr-confidence">Confidence: 95%</span>
+                        </div>
+                        <h4 id="forensic-attr-title" style="margin: 8px 0 4px 0;">Threat Archetype</h4>
+                        <p id="forensic-attr-explanation" style="font-size: 13px; color: var(--text-muted); margin: 0 0 8px 0;"></p>
+                        <ul id="forensic-attr-evidence" style="margin: 0; padding-left: 20px; font-size: 12px;"></ul>
+                    </div>
+
+                    <!-- Alternative Infrastructure Evidence Card (Task 2) -->
+                    <div class="attribution-card mt-3" id="forensic-infra-card" style="display: none; border-left: 4px solid #6366f1;">
+                        <div class="attribution-header">
+                            <span class="attribution-badge" style="background: #e0e7ff; color: #4338ca;">INFRASTRUCTURE INTELLIGENCE</span>
+                            <span style="font-size: 11px; font-weight: 600; color: #6366f1;">Probable infrastructure location, not sender location</span>
+                        </div>
+                        <h4 style="margin: 8px 0 4px 0;">🌐 Alternative Infrastructure Evidence (Links, MX & Routing)</h4>
+                        <p id="forensic-infra-explanation" style="font-size: 13px; color: var(--text-muted); margin: 0 0 10px 0;"></p>
+                        
+                        <!-- Link Hosting Table -->
+                        <div id="forensic-infra-links-container" style="margin-bottom: 10px;">
+                            <h5 style="margin: 0 0 6px 0; font-size: 12px; color: var(--text-main);">🔗 Link Resolution & Hosting Infrastructure</h5>
+                            <table class="history-table" style="font-size: 11.5px;">
+                                <thead>
+                                    <tr>
+                                        <th>Target Link / Host</th>
+                                        <th>Resolved IP</th>
+                                        <th>Hosting Provider / ASN</th>
+                                        <th>Location</th>
+                                        <th>Threat Signals</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="forensic-infra-links-body"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- MX & Reply-To Details -->
+                        <div id="forensic-infra-meta-details" style="font-size: 12px; color: var(--text-muted); line-height: 1.6;"></div>
+                    </div>
+
+                    <!-- 5-Factor Score Matrix -->
+                    <div class="factor-matrix-card mt-3">
+                        <h4 style="margin: 0 0 10px 0;">📊 5-Factor Composite Scorer Audit</h4>
+                        <div class="factors-grid" id="forensic-factors-grid"></div>
+                    </div>
+
+                    <!-- Threat Graph Visualization -->
+                    <div class="graph-card mt-3">
+                        <div class="graph-toolbar-row">
+                            <h4 style="margin: 0;">🌐 Interactive Threat Relationship Graph</h4>
+                            <div class="graph-filter-toolbar">
+                                <button type="button" class="graph-filter-btn active" data-filter="ALL" id="graph-filter-all">All Entities</button>
+                                <button type="button" class="graph-filter-btn" data-filter="HOPS" id="graph-filter-hops">Hop Provenance Chain</button>
+                                <button type="button" class="graph-filter-btn" data-filter="LINKS" id="graph-filter-links">Links & Hosting</button>
+                            </div>
+                        </div>
+                        <div class="graph-legend mb-2">
+                            <span><span class="legend-dot" style="background: #3b82f6;"></span>Email</span>
+                            <span><span class="legend-dot" style="background: #8b5cf6;"></span>Sender</span>
+                            <span><span class="legend-dot" style="background: #6366f1;"></span>Domain</span>
+                            <span><span class="legend-dot" style="background: #06b6d4;"></span>Hop MTA</span>
+                            <span><span class="legend-dot" style="background: #0ea5e9;"></span>Origin IP</span>
+                            <span><span class="legend-dot" style="background: #10b981;"></span>Geo Location</span>
+                            <span><span class="legend-dot" style="background: #64748b;"></span>ASN</span>
+                            <span><span class="legend-dot" style="background: #f97316;"></span>URL</span>
+                            <span><span class="legend-dot" style="background: #a855f7;"></span>MX Record</span>
+                            <span><span class="legend-dot" style="background: #f43f5e;"></span>Attribution</span>
+                        </div>
+                        <div id="threat-graph-canvas" class="graph-canvas-box"></div>
+                        <!-- Interactive Node Inspector Panel -->
+                        <div id="threat-graph-inspector" class="graph-inspector-panel">
+                            <div class="inspector-header">
+                                <span id="inspector-badge" class="inspector-badge">INSPECTOR</span>
+                                <h5 id="inspector-title" style="margin: 0; font-size: 13px; color: #f1f5f9;">Select an entity in the graph</h5>
+                                <span id="inspector-risk" class="inspector-risk"></span>
+                            </div>
+                            <div id="inspector-body" class="inspector-body">
+                                <p style="margin: 0; color: var(--text-muted); font-size: 11px;">Click any entity node above to inspect forensic properties, ASN metadata, routing chronology, and IOC evidence.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hop-by-Hop Trace Table -->
+                    <div class="hops-card mt-3">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <h4 style="margin: 0;">🛤️ Transmission Hop-by-Hop Route Trace</h4>
+                            <span style="font-size: 11px; color: var(--text-muted);">Sequential chronological analysis & MTA infrastructure provenance</span>
+                        </div>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Hop #</th>
+                                    <th>Role</th>
+                                    <th>From Host</th>
+                                    <th>Relayed IP</th>
+                                    <th>Geo / ASN / Provider</th>
+                                    <th>Delay & Chronology</th>
+                                    <th>Receiving Server</th>
+                                </tr>
+                            </thead>
+                            <tbody id="forensic-hops-body"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Export Actions Toolbar -->
+                    <div class="export-toolbar mt-3">
+                        <button id="btn-export-pdf" class="action-btn pdf-btn">📄 Download Court-Grade PDF Report</button>
+                        <button id="btn-export-siem" class="action-btn json-btn">📦 Export SIEM / SOAR JSON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cases & Threat Campaigns Section -->
+        <div id="section-cases" class="content-section" style="display: none;">
+            <header>
+                <h1>Case Management & Coordinated Campaigns</h1>
+                <p>Organize incident investigations, track IOC correlation clusters, and verify cryptographic chain of custody</p>
+            </header>
+
+            <div class="cases-top-actions">
+                <button id="btn-open-create-case-modal" class="primary-btn">➕ New Investigation Case</button>
+                <button id="btn-refresh-cases" class="small-btn">🔄 Refresh Cases</button>
+                <div class="chain-badge" id="chain-status-indicator">🔐 Audit Chain: Verifying...</div>
+            </div>
+
+            <!-- Case Creation Form Modal/Panel -->
+            <div id="create-case-panel" class="settings-card mt-3" style="display: none;">
+                <h3>📁 Open New Forensic Case</h3>
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label for="new-case-title">Case Title</label>
+                        <input type="text" id="new-case-title" placeholder="e.g. Operation WireGhost - Finance BEC" />
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="new-case-severity">Severity</label>
+                        <select id="new-case-severity" class="custom-select">
+                            <option value="CRITICAL">CRITICAL</option>
+                            <option value="HIGH" selected>HIGH</option>
+                            <option value="MEDIUM">MEDIUM</option>
+                            <option value="LOW">LOW</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new-case-desc">Investigation Summary & Scope</label>
+                    <textarea id="new-case-desc" rows="2" placeholder="Details about targeted department, threat vector, or incident scope..."></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-submit-case" class="primary-btn">Create Case</button>
+                    <button id="btn-cancel-case" class="small-btn">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Active Cases Table -->
+            <div class="history-section mt-4">
+                <h2>Active Investigation Cases</h2>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Title</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Associated Emails</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cases-table-body">
+                        <tr><td colspan="7">Loading active cases...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Threat Campaigns Cluster -->
+            <div class="history-section mt-4">
+                <h2>🚨 Coordinated Threat Campaigns (IOC Correlation Clusters)</h2>
+                <div class="campaigns-grid" id="campaigns-container">
+                    <p style="color: var(--text-muted); font-size: 13px;">Scanning cross-incident IOCs for coordinated campaigns...</p>
+                </div>
+            </div>
+
+            <!-- Verifiable Chain of Custody Audit Log -->
+            <div class="history-section mt-4">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>⛓️ Tamper-Evident Chain of Custody (SHA-256 Chained Blocks)</h2>
+                    <button id="btn-verify-chain" class="small-btn">🔍 Run Cryptographic Verification</button>
+                </div>
+                <div id="chain-verify-result" class="chain-verify-banner mt-2" style="display: none;"></div>
+                <table class="history-table mt-2">
+                    <thead>
+                        <tr>
+                            <th>Seq #</th>
+                            <th>Event Type</th>
+                            <th>Target / Subject</th>
+                            <th>Analyst</th>
+                            <th>Block SHA-256 Hash</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audit-chain-body">
+                        <tr><td colspan="6">Loading verifiable chain of custody...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Threat Intel Section -->
+        <div id="section-threat-intel" class="content-section" style="display: none;">
+            <header>
+                <h1>Threat Intelligence</h1>
+                <p>Global threat data powered by VirusTotal API</p>
+            </header>
+            
+            <div class="intel-status-banner" id="intel-status-banner">
+                Checking integration status...
+            </div>
+
+            <div class="history-section mt-4">
+                <h2>Malicious URLs Blocked</h2>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Target URL</th>
+                            <th>Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody id="intel-body">
+                        <tr><td colspan="3">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="section-settings" class="content-section" style="display: none;">
+            <header>
+                <h1>Settings</h1>
+                <p>Configure PhishingGuard behavior and threat integrations</p>
+            </header>
+            
+            <div class="settings-card">
+                <h3>Integrations</h3>
+                <div class="form-group">
+                    <label for="vt-api-key">VirusTotal API Key (v3)</label>
+                    <input type="password" id="vt-api-key" placeholder="Enter your VirusTotal API key..." />
+                    <p class="help-text">Used to query the global Threat Intelligence database for malicious URLs.</p>
+                </div>
+                <button id="save-settings-btn" class="primary-btn">Save API Key</button>
+                <div id="settings-status" class="status-msg"></div>
+            </div>
+
+            <div class="settings-card">
+                <h3>Preferences</h3>
+                <div class="toggle-group">
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Enable Dark Mode</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>

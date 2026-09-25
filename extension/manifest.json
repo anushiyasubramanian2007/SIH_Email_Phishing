@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "PhishingGuard",
+  "version": "1.0.0",
+  "description": "AI-Powered Phishing Detection and Prevention System.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PhishingGuard"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://mail.google.com/*",
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://mail.google.com/*"],
+      "css": ["styles.css"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["warning.html", "warning.css", "warning.js", "dashboard.html"],
+      "matches": ["*://mail.google.com/*"]
+    }
+  ]
+}

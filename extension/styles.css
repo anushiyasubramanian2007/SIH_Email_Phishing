@@ -1,0 +1,337 @@
+/* PhishingGuard Extension Styles */
+
+body {
+    width: 320px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+h1 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    text-align: center;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.status-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    color: #475569;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.status-box p {
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-ok {
+    color: #10b981;
+    font-weight: 700;
+}
+
+.status-danger {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    padding: 9px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+}
+
+/* =========================================================
+   PhishingGuard Injected Banner Styles (Gmail DOM)
+   ========================================================= */
+
+.phishingguard-banner {
+    margin: 12px 16px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 999;
+    transition: all 0.2s ease-in-out;
+    border-left: 6px solid #3b82f6;
+}
+
+/* Loading / Info State */
+.phishingguard-banner-info {
+    background-color: #eff6ff;
+    border-left-color: #3b82f6;
+    color: #1e3a8a;
+}
+
+/* Legitimate / Safe State */
+.phishingguard-banner-legitimate,
+.phishingguard-banner-safe {
+    background-color: #ecfdf5;
+    border-left-color: #10b981;
+    color: #064e3b;
+    border: 1px solid #a7f3d0;
+    border-left-width: 6px;
+}
+
+/* Phishing / High Risk State */
+.phishingguard-banner-phishing {
+    background-color: #fef2f2;
+    border-left-color: #ef4444;
+    color: #7f1d1d;
+    border: 1px solid #fecaca;
+    border-left-width: 6px;
+}
+
+/* Suspicious / Medium Risk State */
+.phishingguard-banner-suspicious {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+    color: #78350f;
+    border: 1px solid #fde68a;
+    border-left-width: 6px;
+}
+
+/* Banner Header Row */
+.pg-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.pg-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pg-brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Verdict Badges */
+.pg-verdict-badge {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-legitimate-pill {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+.badge-phishing-pill {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.badge-suspicious-pill {
+    background-color: #f59e0b;
+    color: #ffffff;
+}
+
+.pg-dismiss-btn {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.pg-dismiss-btn:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Details Section */
+.pg-explanation {
+    font-size: 13.5px;
+    font-weight: 500;
+    margin: 6px 0 10px;
+}
+
+/* Analysis Breakdown Grid */
+.pg-analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .pg-analysis-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pg-analysis-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.pg-card-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pg-card-content {
+    font-size: 12.5px;
+}
+
+/* Attachments breakdown */
+.pg-attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.pg-attachment-item:last-child {
+    border-bottom: none;
+}
+
+.pg-att-name {
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.pg-att-status {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.pg-att-safe {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.pg-att-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.pg-att-warn {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+/* Indicators list */
+.pg-indicators-list {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.pg-indicators-list li {
+    margin-bottom: 4px;
+    font-size: 12.5px;
+}
+
+/* Action Box */
+.pg-action-box {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.pg-action-text {
+    font-weight: 600;
+}
+
+.pg-dashboard-link {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
